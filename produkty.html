@@ -28,12 +28,62 @@
     </footer>
 
     <script>
+        // Parse frontmatter
+        function parseFrontmatter(content) {
+            const match = content.match(/^---\n([\s\S]*?)\n---\n([\s\S]*)$/);
+            if (!match) return { frontmatter: {}, body: content };
+
+            const frontmatter = {};
+            match[1].split('\n').forEach(line => {
+                const [key, ...valueParts] = line.split(':');
+                if (key && valueParts.length) {
+                    frontmatter[key.trim()] = valueParts.join(':').trim().replace(/^"|"$/g, '');
+                }
+            });
+
+            return { frontmatter, body: match[2] };
+        }
+
         // Load products from CMS
         async function loadProducts() {
             const container = document.getElementById('products-list');
-            container.innerHTML = '<p>Přidejte produkty přes <a href="/admin">admin panel</a></p>';
+            container.innerHTML = '<p>Načítám produkty...</p>';
 
-            // Try to load products - will implement when products are added
+            try {
+                const repoUrl = 'https://api.github.com/repos/etr4m/kvetinarstvi-test/contents/_products';
+                const response = await fetch(repoUrl);
+                const files = await response.json();
+
+                if (!files || files.length === 0) {
+                    container.innerHTML = '<p>Zatím žádné produkty. <a href="/admin">Přidejte první produkt!</a></p>';
+                    return;
+                }
+
+                const products = [];
+                for (const file of files) {
+                    if (file.name.endsWith('.md')) {
+                        const prodResponse = await fetch(file.download_url);
+                        const content = await prodResponse.text();
+                        const { frontmatter, body } = parseFrontmatter(content);
+                        products.push({ ...frontmatter, body });
+                    }
+                }
+
+                // Display products
+                container.innerHTML = products.map(product => `
+                    <div class="product-card">
+                        ${product.image ? `<img src="${product.image}" alt="${product.title}" style="width: 100%; border-radius: 10px; margin-bottom: 1rem;">` : ''}
+                        <h3>${product.title}</h3>
+                        <div class="price">${product.price} Kč</div>
+                        <p>${product.description || ''}</p>
+                        ${product.category ? `<p><small>📦 ${product.category}</small></p>` : ''}
+                    </div>
+                `).join('');
+
+            } catch (error) {
+                console.error('Error loading products:', error);
+                container.innerHTML = '<p>Přidejte produkty přes <a href="/admin">admin panel</a></p>';
+            }
         }
 
         document.addEventListener('DOMContentLoaded', loadProducts);
