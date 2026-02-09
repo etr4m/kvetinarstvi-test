@@ -1,8 +1,8 @@
 ---
-title: Růže
-price: 100
-description: Krásná růže
+title: Tulipán
+price: 120
+description: Krásný tulipán
 category: Kytice
-image: /images/uploads/rose-growing-secrets-from-the-pros-1.jpg
-date: 2026-02-09T19:43:00.000+01:00
+image: /images/uploads/71sqolkixll._sl1500_.jpg
+date: 2026-02-09T19:45:00.000+01:00
 ---
