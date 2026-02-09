@@ -1,5 +1,5 @@
 ---
-title: Růže
+title: Tulipán
 price: 100
 description: Krásná růže
 category: Kytice
