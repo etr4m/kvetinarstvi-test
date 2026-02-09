@@ -22,10 +22,36 @@
         <div id="products-list" class="product-grid"></div>
     </main>
 
-    <footer>
+    <footer id="footer-content">
         <p>&copy; 2026 Květinářství Test</p>
         <p><a href="/admin">Admin panel</a></p>
     </footer>
+
+    <script>
+        // Load contact info
+        async function loadContactInfo() {
+            try {
+                const response = await fetch('/_data/contact.json');
+                const contact = await response.json();
+                const footer = document.getElementById('footer-content');
+                if (footer && contact) {
+                    footer.innerHTML = `
+                        <div style="max-width: 1200px; margin: 0 auto;">
+                            <h3>Kontakt</h3>
+                            ${contact.phone ? `<p>📞 ${contact.phone}</p>` : ''}
+                            ${contact.email ? `<p>✉️ ${contact.email}</p>` : ''}
+                            ${contact.address ? `<p>📍 ${contact.address}</p>` : ''}
+                            ${contact.hours ? `<p>🕐 ${contact.hours}</p>` : ''}
+                            <p style="margin-top: 2rem;">&copy; 2026 Květinářství Test</p>
+                            <p><a href="/admin">Admin panel</a></p>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.log('Contact info not found');
+            }
+        }
+    </script>
 
     <script>
         // Parse frontmatter
@@ -86,7 +112,10 @@
             }
         }
 
-        document.addEventListener('DOMContentLoaded', loadProducts);
+        document.addEventListener('DOMContentLoaded', () => {
+            loadProducts();
+            loadContactInfo();
+        });
     </script>
 </body>
 </html>
