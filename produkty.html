@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Produkty - Květinářství</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+</head>
+<body>
+    <header>
+        <h1>🌸 Květinářství</h1>
+        <nav>
+            <a href="index.html">Domů</a>
+            <a href="produkty.html">Produkty</a>
+            <a href="blog.html">Novinky</a>
+        </nav>
+    </header>
+
+    <main>
+        <h2>Naše Produkty</h2>
+        <div id="products-list" class="product-grid"></div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Květinářství Test</p>
+        <p><a href="/admin">Admin panel</a></p>
+    </footer>
+
+    <script>
+        // Load products from CMS
+        async function loadProducts() {
+            const container = document.getElementById('products-list');
+            container.innerHTML = '<p>Přidejte produkty přes <a href="/admin">admin panel</a></p>';
+
+            // Try to load products - will implement when products are added
+        }
+
+        document.addEventListener('DOMContentLoaded', loadProducts);
+    </script>
+</body>
+</html>
